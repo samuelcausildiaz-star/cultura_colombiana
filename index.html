@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cultura Colombiana</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffffdd;
+      --accent: #1b5e20; /* verde profundo */
+      --accent-2: #004d40; /* verde azulado */
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: #000; background: linear-gradient(180deg,#f9fafc, var(--bg));
+      line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .hero {
+      position: relative; overflow: hidden; padding: 80px 20px 60px; text-align: center;
+      background: radial-gradient(1200px 600px at 80% -10%, #e8f5e9 0%, transparent 60%), radial-gradient(1200px 600px at 10% -20%, #e0f2f1 0%, transparent 60%);
+    }
+    .hero .wrap { max-width: 1100px; margin: 0 auto; }
+    .badge { display: inline-block; padding: 8px 12px; border-radius: 999px; background: #fff; box-shadow: var(--shadow); font-weight: 600; letter-spacing: .3px; }
+    h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 16px 0 10px; font-weight: 800; }
+    .subtitle { font-size: clamp(1rem, 2.2vw, 1.15rem); opacity: .9; max-width: 760px; margin: 0 auto; }
+
+    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 26px auto 0; }
+    .chip {
+      background: #fff; border: 1px solid #e6e6e6; border-radius: 999px; padding: 10px 14px; cursor: pointer; box-shadow: var(--shadow);
+      display: inline-flex; align-items: center; gap: 10px; transition: transform .12s ease, box-shadow .12s ease;
+      font-weight: 600;
+    }
+    .chip:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.12); }
+
+    .container { max-width: 1100px; margin: 28px auto 80px; padding: 0 20px; }
+
+    .grid {
+      display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px;
+    }
+
+    .card { background: var(--card); border: 1px solid rgba(0,0,0,.06); backdrop-filter: blur(6px); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; }
+    .card h3 { margin: 0 0 8px; font-size: 1.25rem; }
+    .card p { margin: 0; }
+
+    /* Alternar tarjetas a los lados (ventanas posicionadas) */
+    .left { grid-column: 1 / span 6; }
+    .right { grid-column: 7 / span 6; }
+
+    /* Animaciones de aparición desde los lados */
+    .reveal-left { opacity: 0; transform: translateX(-40px); animation: in-left .7s cubic-bezier(.2,.8,.2,1) forwards; }
+    .reveal-right { opacity: 0; transform: translateX(40px); animation: in-right .7s cubic-bezier(.2,.8,.2,1) forwards; }
+    @keyframes in-left { to { opacity: 1; transform: translateX(0); } }
+    @keyframes in-right { to { opacity: 1; transform: translateX(0); } }
+
+    /* Paneles laterales deslizables (ventanas) */
+    .drawer { position: fixed; top: 0; bottom: 0; width: min(520px, 96%); background: #fff; color: #000; box-shadow: 0 20px 60px rgba(0,0,0,.18);
+      z-index: 50; padding: 26px; overflow-y: auto; border-radius: 0 0 var(--radius) var(--radius);
+    }
+    .drawer h2 { margin-top: 0; font-size: 1.6rem; }
+    .drawer .close { position: sticky; top: 0; background: #fff; padding: 8px 0 14px; display: flex; justify-content: flex-end; }
+    .drawer .close button { border: 1px solid #eee; border-radius: 12px; padding: 8px 12px; background: #fff; cursor: pointer; font-weight: 600; }
+
+    .drawer.left { left: 0; transform: translateX(-110%); border-right: 1px solid #eee; }
+    .drawer.right { right: 0; transform: translateX(110%); border-left: 1px solid #eee; }
+    .drawer.show { transform: translateX(0); transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+
+    .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.25); backdrop-filter: blur(2px); z-index: 40; opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+    .backdrop.show { opacity: 1; pointer-events: auto; }
+
+    /* Sección de créditos/pie */
+    footer { margin: 60px auto; text-align: center; opacity: .8; font-size: .95rem; }
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+      .left, .right { grid-column: 1 / -1; }
+    }
+
+    /* Detalles visuales */
+    .flag {
+      display: inline-grid; grid-template-columns: 2fr 2fr 1fr; width: 84px; height: 18px; border-radius: 3px; overflow: hidden; margin-left: 6px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+    }
+    .flag div:nth-child(1){ background: #FCD116; }
+    .flag div:nth-child(2){ background: #003893; }
+    .flag div:nth-child(3){ background: #CE1126; }
+
+    .accent { border-left: 6px solid var(--accent); padding-left: 12px; }
+    .accent-2 { border-left: 6px solid var(--accent-2); padding-left: 12px; }
+
+    .list { margin: 10px 0 0 0; padding-left: 18px; }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="wrap">
+      <span class="badge">Cultura Colombiana
+        <span class="flag" aria-hidden="true"><div></div><div></div><div></div></span>
+      </span>
+      <h1>Un viaje por la diversidad de Colombia</h1>
+      <p class="subtitle">Una página estética,que te permite explorar gastronomía, música, danzas, arte, regiones, festividades, historia y más.<strong> todo en pro de resaltar nuestra cultura.</p>
+
+      <div class="toolbar" role="toolbar" aria-label="Abrir ventanas laterales">
+        <button class="chip" data-drawer="left" data-topic="gastronomia">🍲 Gastronomía</button>
+        <button class="chip" data-drawer="right" data-topic="musica">🎶 Música & Danzas</button>
+        <button class="chip" data-drawer="left" data-topic="arte">🎨 Arte & Literatura</button>
+        <button class="chip" data-drawer="right" data-topic="regiones">🌿 Regiones & Biodiversidad</button>
+        <button class="chip" data-drawer="left" data-topic="fiestas">🎉 Festividades</button>
+        <button class="chip" data-drawer="right" data-topic="historia">📜 Historia & Pueblos</button>
+        <button class="chip" data-drawer="left" data-topic="deporte">⚽ Deportes</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="grid" aria-label="Tarjetas informativas alternadas">
+
+      <article class="card left reveal-left">
+        <h3 class="accent">Gastronomía: Sabores que cuentan historias</h3>
+        <p>Bandeja paisa, ajiaco, sancocho, lechona, arepas de mil formas, aborrajados, mamona llanera, ceviche de chontaduro y café de altura. Los ingredientes locales —maíz, yuca, plátano, papa, cacao— son memoria y territorio en el plato, provenientes de distintas culturas y tradiciones como la indigena ya mencinada la afro y los colonos españoles.</p>
+          </article>
+
+      <article class="card right reveal-right">
+        <h3 class="accent-2">Música & Danzas: Ritmos que mueven país</h3>
+        <p>Cumbia, vallenato, porro, currulao, joropo, bambuco, salsa caleña y champeta. Del acordeón a la marimba de chonta, de los tambores del Caribe al arpa llanera, el cuerpo celebra con cada compás.</p>
+      </article>
+
+      <article class="card left reveal-left">
+        <h3 class="accent">Arte & Literatura: Miradas que transforman</h3>
+        <p>Del realismo mágico a los murales urbanos, de cerámicas prehispánicas a nuevas narrativas afro e indígenas. La cultura visual y escrita de Colombia dialoga con su diversidad y su historia.</p>
+      </article>
+
+      <article class="card right reveal-right">
+        <h3 class="accent-2">Regiones & Biodiversidad: Un país megadiverso</h3>
+        <p>Amazonía, Andes, Caribe, Orinoquía y Pacífico: cinco regiones naturales, cientos de microclimas, páramos únicos y dos océanos. La naturaleza es maestra y banda sonora.</p>
+      </article>
+
+      <article class="card left reveal-left">
+        <h3 class="accent">Festividades: Calendario vivo</h3>
+        <p>Carnaval de Barranquilla, Feria de las Flores, Carnaval de Negros y Blancos, Festival Vallenato, Feria de Cali y San Pacho. Tradición, disfraces, flores, comparsas y patrimonio en movimiento.</p>
+      </article>
+
+      <article class="card right reveal-right">
+        <h3 class="accent-2">Historia & Pueblos: Memoria plural</h3>
+        <p>Raíces indígenas, herencias afrodescendientes y legado mestizo. De los muiscas y taironas a palenques y resguardos: Colombia es un tejido de pueblos y memorias en construcción.</p>
+      </article>
+
+      <article class="card left reveal-left">
+        <h3 class="accent">Deportes: Pasión que nos une</h3>
+        <p>Fútbol, ciclismo, patinaje, tejo y más. De las cumbres del Tour a la emoción de los estadios, el deporte vibra en las esquinas del país.</p>
+      </article>
+
+    </section>
+  </main>
+
+  <footer>
+    Hecho con ❤️ y orgullo colombiano, dedicación y esmero por preservar nuaetra hermosa cultura colombiana.
+  </footer>
+
+  <div class="backdrop" id="backdrop" role="presentation" aria-hidden="true"></div>
+
+  <!-- Drawers (ventanas laterales) reutilizables -->
+  <aside class="drawer left" id="drawer-left" aria-hidden="true" aria-labelledby="drawer-left-title">
+    <div class="close"><button onclick="closeDrawers()" aria-label="Cerrar ventana">Cerrar ✕</button></div>
+    <h2 id="drawer-left-title">Título</h2>
+    <div id="drawer-left-content"></div>
+  </aside>
+
+  <aside class="drawer right" id="drawer-right" aria-hidden="true" aria-labelledby="drawer-right-title">
+    <div class="close"><button onclick="closeDrawers()" aria-label="Cerrar ventana">Cerrar ✕</button></div>
+    <h2 id="drawer-right-title">Título</h2>
+    <div id="drawer-right-content"></div>
+  </aside>
+
+  <script>
+    // Contenidos para las ventanas laterales
+    const topics = {
+      gastronomia: {
+        title: 'Gastronomía Colombiana',
+        html: `
+          <p class="accent">Sabores regionales</p>
+          <ul class="list">
+            <li><strong>Caribe:</strong> arroz con coco, pescado frito, arepa e' huevo.</li>
+            <li><strong>Pacífico:</strong> encocado de camarón, tapao, viche ancestral.</li>
+            <li><stron  g>Andes:</strong> ajiaco, tamal, changua, bandeja paisa.</li>
+            <li><strong>Orinoquía:</strong> mamona, hayacas, tungos.</li>
+            <li><strong>Amazonía:</strong> casabe, mojojoy, chontaduro.</li>
+          </ul>
+          <p>El café de origen y el cacao fino de aroma son embajadores mundiales. La cocina es territorio, memoria y creatividad.</p> 
+          <p>Aparte de lo mencinado anteriormente cabe resaltar que nuestra gastronomia es una mescla de una rica fusión culturar que mezcla las tradiciones alimentarias de los pueblos indigenas, los colonizadores españoles y los africanos, a quienes se suman influencias Asiaticas y árabes más recientes.</pi>   
+        ` 
+      
+      },
+      musica: {
+        title: 'Música & Danzas',
+        html: `
+          <p class="accent">Instrumentos y ritmos</p>
+          <ul class="list">
+            <li><strong>Vallenato:</strong> acordeón, caja y guacharaca. inesperable del acordeón; sus cuatro aires (puya, son, merengue y paseo) narran historia de amor y cotidianidad.</li>
+            <li><strong>Cumbia:</strong> gaitas, tambores, maracas. Nacida en la costa caribe, mescla de raices indigenas, africanas y españolas </li>
+            <li><strong>Currulao:</strong> marimba de chonta, cununos, guasá. Desde el pacífico con cantos ancestrales afrocolombianos. el baile representa el encuentro entre hombre y mujer en un juego de cortejo </li>
+            <li><strong>Joropo:</strong> arpa, cuatro y maracas. Típico delos llanos orientales; se baila zapateando con fuerza, aconpañado de arpa, cuatro y maracas</li>
+            <li><strong>Salsa caleña:</strong> pasos veloces y sabor urbano. Estilo de salsa propio de Cali, reconocida como la capital mundial de este género. Se caracteriza por pasos cortos, veloces y acrobaticos, aconpañados de orquesta de gran fuerza. Más que un baile, es identidad caleña y símbolo de fiesta y alegría.</li>
+          </ul>
+          <p>Las danzas son lenguaje: polleras, zapateos y trenzas que cuentan historias.<p>
+          <p>Hoy en día, Colombia también exporta géneros urbanos como:reguetón, champeta, salsa choke y fusión que ha llevado a artistas como Shakira, Karol G o J Balvin a escenarios globales </p>
+        `
+      },
+      arte: {
+        title: 'Arte & Literatura',
+        html: `
+          <p class="accent">De lo ancestral a lo contemporáneo</p>
+          <ul class="list">
+            <li>Artesanías: mochilas wayuu, filigrana momposina, sombrero vueltiao.</li>
+            <li>Literatura: realismo mágico, voces afro e indígenas, poesía urbana, tiene su orígenes en las cronicasde la conquista y los relatos coloniales.
+              En el siglo XIX surgieron poetas y narradores que buscaban una identidad nacional,como <strong> José Asunción Silva <strong> el máximo representante es <strong> GABRIEL GARCÍA MÁRQUEZ <strong> ganador del premio nobel de literatura en (1982) caracterizado con su realismo mágico y obras como: Cien años de soledad, el amor en los tiempos de cólera, crónicas de una muerte anunciada, el coronel no tiene quien le escriba entre otras.
+              También sobresalen autores como Álvaro Mutis, Laura restrepo y Willian Ospina, que reflejan la historia, la política y los mitos del país, la literatura actual mescla voces jóvenes, poesía urbana y narrativa digitales que muestran la colombia cotemporánea</li>
+            <li>Artes visuales: muralismo, fotografía, cerámica, performance.</li>
+          </ul>
+          <p>La imaginación colombiana mezcla selva, montaña y ciudad en una misma paleta.</p>
+        `
+      },
+      regiones: {
+        title: 'Regiones & Biodiversidad',
+        html: `
+              <p class="accent">Megadiversidad</p>
+              <ul class="list">
+                <li>Páramos únicos y nevados andinos.</li>
+                <li>Dos océanos: Caribe cristalino y Pacífico sonoro.</li>
+                <li>Amazonía: pulmón del mundo con saberes ancestrales.</li>
+                <li>Orinoquía: sabanas y joropo que cabalga el viento.</li>
+              </ul>
+              <p>El país es un mosaico ecológico que inspira música, cocina y cosmovisiones.</p>
+            `
+          },
+      fiestas: {
+        title: 'Festividades',
+        html: `
+          <p class="accent">Patrimonios y celebraciones</p>
+          <ul class="list">
+            <li>Carnaval de Barranquilla y su Batalla de Flores.</li>
+            <li>Feria de las Flores con silleteros de Medellín.</li>
+            <li>Carnaval de Negros y Blancos en Pasto.</li>
+            <li>Festival de la Leyenda Vallenata en Valledupar.</li>
+            <li>San Pacho en Quibdó y Feria de Cali.</li>
+          </ul>
+          <p>Calendario que vibra con identidad, memoria y comunidad.</p>
+        `
+      },
+      historia: {
+        title: 'Historia & Pueblos',
+        html: `
+          <p class="accent">Diversidad de orígenes</p>
+          <ul class="list">
+            <li>Pueblos indígenas: muiscas, wayuu, nasa, embera, arhuacos, entre otros.</li>
+            <li>Herencias afrodescendientes: palenques, marimba, oralidad y resistencia.</li>
+            <li>Mestizaje y migraciones que nutren la nación.</li>
+          </ul>
+          <p>La historia es polifónica: muchas voces tejen el presente.</p>
+        `
+      },
+      deporte: {
+        title: 'Deportes',
+        html: `
+          <p class="accent">Pasión y talento</p>
+          <ul class="list">
+            <li>Fútbol de barrios y grandes estadios.</li>
+            <li>Ciclismo de montaña y grandes vueltas.</li>
+            <li>Patinaje, atletismo y tejo como deporte nacional.</li>
+          </ul>
+            <p>La disciplina y la alegría son equipo imbatible.</p>
+            <p>
+
+           `
+        }
+      };
+    
+
+    const leftDrawer = document.getElementById('drawer-left');
+    const rightDrawer = document.getElementById('drawer-right');
+    const bd = document.getElementById('backdrop');
+
+    function openDrawer(side, topicKey){
+      const data = topics[topicKey];
+      if(!data) return;
+
+      const drawer = side === 'left' ? leftDrawer : rightDrawer;
+      const titleEl = drawer.querySelector('h2');
+      const contentEl = drawer.querySelector('div[id$="-content"]');
+
+      titleEl.textContent = data.title;
+      contentEl.innerHTML = data.html;
+
+      drawer.classList.add('show');
+      drawer.setAttribute('aria-hidden','false');
+      bd.classList.add('show');
+      bd.setAttribute('aria-hidden','false');
+    }
+
+    function closeDrawers(){
+      [leftDrawer, rightDrawer].forEach(d => { d.classList.remove('show'); d.setAttribute('aria-hidden','true'); });
+      bd.classList.remove('show');
+      bd.setAttribute('aria-hidden','true');
+    }
+
+    document.querySelectorAll('.chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const side = btn.getAttribute('data-drawer');
+        const topic = btn.getAttribute('data-topic');
+        openDrawer(side, topic);
+      })
+    });
+
+    bd.addEventListener('click', closeDrawers);
+
+    // Intersection Observer para revelar tarjetas con efecto desde los lados
+    const cards = document.querySelectorAll('.reveal-left, .reveal-right');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting) e.target.style.animationPlayState = 'running'; })
+    }, { threshold: .15 });
+    cards.forEach(c => { c.style.animationPlayState = 'paused'; io.observe(c); });
+
+    // Accesibilidad con tecla ESC
+    window.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeDrawers(); });
+  </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Chatbot Cultura Colombiana</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; }
+    #chatbot-icon {
+      position: fixed; bottom: 20px; right: 20px;
+      background: #d12a9a; color: #000; border-radius: 50%;
+      width: 60px; height: 60px; display: flex;
+      align-items: center; justify-content: center;
+      cursor: pointer; font-size: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+    #chatbot-window {
+      position: fixed; bottom: 90px; right: 20px;
+      width: 350px; height: 500px; background: #fff;
+      border: 2px solid #333; border-radius: 12px;
+      display: none; flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4); z-index: 1001;
+    }
+    #chatbot-header {
+      background: #0eabdb; padding: 10px;
+      cursor: move; font-weight: bold; text-align: center;
+      border-radius: 10px 10px 0 0;
+    }
+    #chat-box {
+      flex: 1; padding: 10px; overflow-y: auto;
+      font-size: 14px;
+    }
+    .user { text-align: right; margin: 5px; color: rgb(4, 95, 95); }
+    .bot { text-align: left; margin: 5px; color: rgb(10, 10, 10); }
+    #input-area {
+      display: flex; border-top: 1px solid #ccc;
+    }
+    #user-input {
+      flex: 1; padding: 10px; border: none;
+    }
+    #send-btn {
+      padding: 10px; background: #2ebdd6; border: none;
+      cursor: pointer; font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div id="chatbot-icon">💬</div>
+
+<div id="chatbot-window">
+  <div id="chatbot-header">🤖 Chatbot Cultura Colombiana</div>
+  <div id="chat-box"></div>
+  <div id="input-area">
+    <input type="text" id="user-input" placeholder="Escribe tu pregunta aquí...">
+    <button id="send-btn">Enviar</button>
+  </div>
+</div>
+
+<script>
+  // 📚 Base de conocimiento
+  const knowledgeBase = {
+    "historia": "La historia de Colombia se remonta a civilizaciones indígenas como los muiscas, taironas y quimbayas...",
+    "geografía": "Colombia está ubicada en América del Sur, con costas en el océano Pacífico y el mar Caribe...",
+    "gastronomía": "La bandeja paisa, el ajiaco, la arepa, la lechona, el sancocho, el mute santandereano...",
+    "música": "Colombia es cuna de géneros como la cumbia, el vallenato, el porro, la salsa choke, el bambuco...",
+    "danzas": "Cumbia, mapalé, joropo, currulao, bambuco y salsa caleña son bailes representativos...",
+    "cafetero": "El Eje Cafetero está compuesto por Caldas, Quindío y Risaralda, con paisajes culturales reconocidos por la UNESCO...",
+    "deportes": "El fútbol es el deporte más popular, pero también destacan ciclismo, patinaje, boxeo y halterofilia...",
+    "festividades": "Carnaval de Barranquilla, Feria de Cali, Feria de las Flores, Carnaval de Negros y Blancos...",
+    "arte": "Artistas como Fernando Botero, Alejandro Obregón y Doris Salcedo son referentes del arte colombiano...",
+    "literatura": "Gabriel García Márquez, premio Nobel de Literatura, es uno de los autores más influyentes...",
+    "biodiversidad": "Colombia es el segundo país más biodiverso del mundo, con más de 50,000 especies registradas...",
+    "ciudades": "Bogotá, Medellín, Cali, Barranquilla y Cartagena son las principales ciudades...",
+    "arquitectura": "Cartagena conserva murallas coloniales, Villa de Leyva casas coloniales y Medellín arquitectura moderna...",
+    "moda": "Colombia destaca con la Feria de Moda Colombiamoda en Medellín y diseñadores como Johanna Ortiz...",
+    "cine": "Películas como 'El abrazo de la serpiente' han ganado reconocimiento internacional...",
+    "economía": "Colombia produce café, flores, petróleo, carbón, esmeraldas y cada vez más tecnología...",
+    "religión": "Predomina el catolicismo, pero también hay presencia de cristianismo evangélico, comunidades indígenas...",
+    "teatro": "Festivales como el Festival Iberoamericano de Teatro de Bogotá son de talla mundial...",
+    "educación": "Colombia cuenta con universidades como la Nacional, Los Andes, Javeriana y Antioquia...",
+    "gastronomía regional": "En la costa se come arroz con coco y pescado; en el interior ajiaco; en Antioquia bandeja paisa..."
+  };
+
+  const chatBox = document.getElementById("chat-box");
+  const userInput = document.getElementById("user-input");
+
+  function addMessage(sender, text) {
+    const msg = document.createElement("div");
+    msg.className = sender;
+    msg.textContent = text;
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  // 🎲 Saludos dinámicos con datos curiosos
+  const greetings = [
+    "👋 ¡Hola, bienvenido a tu chatbot! 🌟 Aquí podrás conocer mucho más de nuestra cultura colombiana.",
+    "🇨🇴 ¿Sabías que Colombia es el segundo país más biodiverso del mundo? Bienvenido, explora y pregunta lo que quieras.",
+    "🎶 Hola, bienvenido. ¿Sabías que la cumbia nació en Colombia como una mezcla de ritmos indígenas, africanos y europeos?",
+    "☕ Bienvenido, viajero. ¿Sabías que el café colombiano es considerado uno de los mejores del mundo?",
+    "🌸 ¡Hola! Colombia tiene más especies de orquídeas que cualquier otro país. Pregunta lo que quieras.",
+    "🏞️ ¡Bienvenido! ¿Sabías que en un solo día puedes ver nieve, selva y playa en Colombia?",
+    "📚 Hola, amante de la cultura. Gabriel García Márquez llevó a Colombia a ganar un Nobel de Literatura."
+  ];
+
+  // ✅ Mensaje de bienvenida aleatorio
+  window.onload = () => {
+    const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+    addMessage("bot", randomGreeting);
+  };
+
+  // 🤖 Generador de respuestas
+  function botReply(input) {
+    input = input.toLowerCase();
+
+    if (input.includes("historia")) return knowledgeBase.historia;
+    if (input.includes("geografía") || input.includes("mapa")) return knowledgeBase.geografía;
+    if (input.includes("gastronomía") || input.includes("comida")) return knowledgeBase.gastronomía;
+    if (input.includes("música") || input.includes("canción")) return knowledgeBase.música;
+    if (input.includes("baile") || input.includes("danza")) return knowledgeBase.danzas;
+    if (input.includes("café") || input.includes("cafetero")) return knowledgeBase.cafetero;
+    if (input.includes("deporte")) return knowledgeBase.deportes;
+    if (input.includes("fiesta") || input.includes("festival")) return knowledgeBase.festividades;
+    if (input.includes("arte") || input.includes("pintura")) return knowledgeBase.arte;
+    if (input.includes("libro") || input.includes("literatura")) return knowledgeBase.literatura;
+    if (input.includes("biodiversidad") || input.includes("naturaleza")) return knowledgeBase.biodiversidad;
+    if (input.includes("ciudad")) return knowledgeBase.ciudades;
+    if (input.includes("arquitectura")) return knowledgeBase.arquitectura;
+    if (input.includes("moda")) return knowledgeBase.moda;
+    if (input.includes("cine") || input.includes("película")) return knowledgeBase.cine;
+    if (input.includes("economía")) return knowledgeBase.economía;
+    if (input.includes("religión")) return knowledgeBase.religión;
+    if (input.includes("teatro")) return knowledgeBase.teatro;
+    if (input.includes("educación") || input.includes("universidad")) return knowledgeBase.educación;
+    if (input.includes("regional")) return knowledgeBase["gastronomía regional"];
+
+    return "🤔 Puedo hablarte de historia, geografía, gastronomía, música, danzas, café, deportes, festividades, arte, literatura, biodiversidad, ciudades, arquitectura, moda, cine, economía, religión, teatro y educación. ¡Pregúntame algo!";
+  }
+
+  function sendMessage() {
+    const text = userInput.value.trim();
+    if (text === "") return;
+    addMessage("user", ": 🧑‍🦰" + text);
+    const reply = botReply(text);
+    setTimeout(() => addMessage("bot", "🤖: " + reply), 600);
+    userInput.value = "";
+  }
+
+  document.getElementById("send-btn").addEventListener("click", sendMessage);
+  userInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+
+  // ✅ Abrir/cerrar chatbot
+  const chatbotIcon = document.getElementById("chatbot-icon");
+  const chatbotWindow = document.getElementById("chatbot-window");
+  chatbotIcon.onclick = () => {
+    chatbotWindow.style.display = chatbotWindow.style.display === "flex" ? "none" : "flex";
+  };
+
+  // ✅ Mover la ventana
+  const header = document.getElementById("chatbot-header");
+  let offsetX = 0, offsetY = 0, isDragging = false;
+  header.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    offsetX = e.clientX - chatbotWindow.offsetLeft;
+    offsetY = e.clientY - chatbotWindow.offsetTop;
+  });
+  document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+      chatbotWindow.style.left = (e.clientX - offsetX) + "px";
+      chatbotWindow.style.top = (e.clientY - offsetY) + "px";
+      chatbotWindow.style.bottom = "auto";
+      chatbotWindow.style.right = "auto";
+    }
+  });
+  document.addEventListener("mouseup", () => isDragging = false);
+
+  // ✅ Tecla Escape para cerrar
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") chatbotWindow.style.display = "none";
+  });
+</script>
+
+</body>
+</html>
